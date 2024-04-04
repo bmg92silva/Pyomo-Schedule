@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--divinectorweb.com-->
+
+<head>
+	<meta charset="UTF-8">
+	<title>Simple Sidebar Menu Using HTML & CSS</title>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+	<link href="{{ url_for('static',filename='styles/style.css') }}" rel="stylesheet">
+</head>
+
+<body>
+	<nav>
+		<ul>
+			<li class="logo"><img alt=""
+					src="https://yt3.googleusercontent.com/ytc/AIf8zZQ6QM6mfoAH1Z1lq7zj7VMKz33ITzcokOGab0QdsQ=s900-c-k-c0x00ffffff-no-rj">
+			</li>
+			<li>
+				<a href="/"><i class="fa fa-home"></i>   Home</a>
+			</li>
+			<li>
+				<a href="/ucs"><i class="fa fa-book"></i>   UCs</a>
+			</li>
+			<li>
+				<a href="/groups"><i class="fa fa-users"></i>   Groups</a>
+			</li>
+			<li>
+				<a href="/profs"><i class="fa fa-user-circle"></i>   Professors</a>
+			</li>
+			<li>
+				<a href="/rooms"><i class="fa fa-cube"></i>   Classrooms</a>
+			</li>
+			<li>
+				<a>-----------------------</a>
+			</li>
+			<li>
+				<a href="/groups_ucs"><i class="fa fa-users"></i> <i class="fa fa-book"></i>   Group UCs</a>
+			</li>
+			<li>
+				<a href="/profs_ucs"><i class="fa fa-user-circle"></i> <i class="fa fa-book"></i>   Prof. UCs</a>
+			</li>
+			<li>
+				<a href="/rooms_ucs"><i class="fa fa-cube"></i> <i class="fa fa-book"></i>   Room UCs</a>
+			</li>
+			<li>
+				<a href="/days_groups"><i class="fa fa-users"></i> <i class="fa fa-sun-o"></i>   Group Days</a>
+			</li>
+			<li>
+				<a href="/days_profs"><i class="fa fa-user-circle"></i> <i class="fa fa-sun-o"></i>   Prof. Days</a>
+			</li>
+			<li>
+				<a href="/const"><i class="fa fa-cogs"></i> Configuration</a>
+			</li>
+		</ul>
+	</nav>
+	<div class="wrapper">
+		<div class="section">
+			<div class="box-area">
+				<h2>Add Professor UCs</h2>
+				<form action="/add_profs_ucs" method="post">
+					<label for="prof_id">Professor ID:</label>
+					<input type="text" id="prof_id" name="prof_id"><br>
+					<label for="ucs">UCs:</label>
+					<input type="text" id="ucs" name="ucs"><br>
+					<input type="submit" value="Submit">
+				</form>
+
+				<h1>Professor UCs</h1>
+				<table>
+					<tr>
+						<th>Professor ID</th>
+						<th>Group UCs</th>
+						<th>Action</th>
+					</tr>
+					{% for prof_ucs in profs_ucs %}
+					<tr>
+						<td>{{ prof_ucs[0] }}</td>
+						<td>{{ prof_ucs[1] }}</td>
+						<td><a href="/delete_profs_ucs/{{ prof_ucs[0] }}">Delete</a></td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

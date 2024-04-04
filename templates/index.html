@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--divinectorweb.com-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Sidebar Menu Using HTML & CSS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ url_for('static',filename='styles/style.css') }}" rel="stylesheet">
+    <style>
+        .loading {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            margin: auto;
+            margin-top: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li class="logo"><img alt=""
+                    src="https://yt3.googleusercontent.com/ytc/AIf8zZQ6QM6mfoAH1Z1lq7zj7VMKz33ITzcokOGab0QdsQ=s900-c-k-c0x00ffffff-no-rj">
+            </li>
+            <li>
+                <a href="/"><i class="fa fa-home"></i>   Home</a>
+            </li>
+            <li>
+                <a href="/ucs"><i class="fa fa-book"></i>   UCs</a>
+            </li>
+            <li>
+                <a href="/groups"><i class="fa fa-users"></i>   Groups</a>
+            </li>
+            <li>
+                <a href="/profs"><i class="fa fa-user-circle"></i>   Professors</a>
+            </li>
+            <li>
+                <a href="/rooms"><i class="fa fa-cube"></i>   Classrooms</a>
+            </li>
+            <li>
+                <a>-----------------------</a>
+            </li>
+            <li>
+                <a href="/groups_ucs"><i class="fa fa-users"></i> <i class="fa fa-book"></i>   Group UCs</a>
+            </li>
+            <li>
+                <a href="/profs_ucs"><i class="fa fa-user-circle"></i> <i class="fa fa-book"></i>   Prof. UCs</a>
+            </li>
+            <li>
+                <a href="/rooms_ucs"><i class="fa fa-cube"></i> <i class="fa fa-book"></i>   Room UCs</a>
+            </li>
+            <li>
+                <a href="/days_groups"><i class="fa fa-users"></i> <i class="fa fa-sun-o"></i>   Group Days</a>
+            </li>
+            <li>
+                <a href="/days_profs"><i class="fa fa-user-circle"></i> <i class="fa fa-sun-o"></i>   Prof. Days</a>
+            </li>
+            <li>
+                <a href="/const"><i class="fa fa-cogs"></i> Configuration</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="wrapper">
+        <div class="section">
+            <div class="box-area">
+                <!-- Loading animation -->
+                <div class="loading hide"></div>
+                <h2 style="color: #2b2626">Homepage</h2>
+                <button id="runButton">Run Main Schedule</button>
+                <button
+                    onclick="window.location.href='{{ url_for('static',filename='excel/schedule_groups.xlsx')}}'">Download
+                    Groups Schedule</button>
+                <button
+                    onclick="window.location.href='{{ url_for('static',filename='excel/schedule_professors.xlsx')}}'">Download
+                    Groups Schedule</button>
+
+                <!-- DataFrames -->
+                <div class="dataframes-container">
+                    <div class="dataframe-group">
+                        {% for table, group in zip_group %}
+                        <h3>{{ group }}</h3>
+                        {{ table|safe }}
+                        {% endfor %}
+                    </div>
+
+                    <div class="dataframe-prof">
+                        {% for table, prof in zip_prof %}
+                        <h3>{{ prof }}</h3>
+                        {{ table|safe }}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById("runButton").addEventListener("click", function () {
+
+                        // Show loading animation
+                        document.querySelector('.loading').classList.remove('hide');
+
+                        // Delete dataframes
+                        var dataframes = document.querySelectorAll(".dataframe");
+                        dataframes.forEach(function (df) {
+                            df.remove();
+                        })
+
+                        var names = document.querySelectorAll('h3');
+                        names.forEach(function (nm) {
+                            nm.remove();
+                        })
+
+                        // Run schedule
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/run_main_sched", true);
+                        xhr.onload = function () {
+                            if (xhr.status === 204) {
+                                window.location.reload(); // Reload the page after success
+                            }
+                        };
+                        xhr.send();
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
